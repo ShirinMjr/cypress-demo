@@ -14,7 +14,6 @@ describe("Test - IFrame and drag and drop", () => {
             //turning Jquery element to Cypress element
             cy.wrap(body).find("#draggable").as("source");
             cy.wrap(body).find("#droppable").as("target");
-
         });
         /** 
          * loginc for drag and drop - look for cypress trigger
@@ -25,5 +24,7 @@ describe("Test - IFrame and drag and drop", () => {
         cy.get("@source").trigger("mousedown", { which: 1 });
         cy.get("@target").trigger("mousemove", { which: 1 }).trigger("mouseup", { force: true });
 
+        //Verify once the element is dropped, text will change to "dropped"
+        cy.get("@target").should("contains.text", "Dropped!");
     });
 });
