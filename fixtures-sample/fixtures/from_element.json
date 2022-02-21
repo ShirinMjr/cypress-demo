@@ -1,0 +1,26 @@
+{
+    "firstName": {
+        "loc": "#wpforms-49-field_1",
+        "val": "TestName"
+    },
+    "lastName": {
+        "loc": "#wpforms-49-field_1-last",
+        "val": "TestLName"
+    },
+    "email": {
+        "loc": "input[type='email']",
+        "val": "testuser@test.com"
+    },
+    "phoneNumber": {
+        "loc": "input[type='number']",
+        "val": "9991234040"
+    },
+    "checkBox": {
+        "loc": "input[type='checkbox']",
+        "val": "Female"
+    },
+    "select": {
+        "loc": "#wpforms-49-field_5",
+        "val": "Cypress"
+    }
+}
