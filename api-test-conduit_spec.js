@@ -1,4 +1,4 @@
-<reference types="cypress" />
+/// <reference types="cypress"/>
 /**
  ******* Full API TEST *******
  * GET API TEST:
@@ -12,10 +12,11 @@
  * New record -> get the article we posted (slug)
  * PUT API TEST:
  * Having 'slug' from previous test 
- * we can update the record which we created before -> a PUT request
- * 
+ * we can update the record which we created before -> PUT request
+ * DELETE API TEST:
+ * Having 'slug' from previous test 
+ * we can update the record which we created before -> DELETE request
  */
-
 describe("API Testing of Conduit App", () => {
 
     it("GET API TEST", () => {
@@ -31,8 +32,8 @@ describe("API Testing of Conduit App", () => {
         });
     });
 
-    it("POST API TEST", () => {
-
+    it.only("POST => PUT => Delete API TEST", () => {
+        //======= POST ===========================
         let token;//token to authenticate - to POST we need to first authenticate
         let slug; //to get the response object
         cy.request({
@@ -75,24 +76,52 @@ describe("API Testing of Conduit App", () => {
                 //response
                 slug = response.body.article.slug;
                 cy.log(slug);
+                cy.log(token);
+                cy.wait(2000)
+                //====================== PUT ===========================
                 //Sending the PUT resuest to updated the content we just create
                 cy.request({
                     method: "PUT",
                     url: "http://localhost:3000/api/articles/" + slug,
-                    "article": {
-                        "title": "Update! - Cypress articles from cypress code",
-                        "description": "Update! - This is regarding Cypress",
-                        "body": "Update! - Cypress is a test automation tool",
-                        "tagList": [
-                            "cypress",
-                            "test"
-                        ]
+                    headers: {
+                        "Authorization": "Token " + token
+                    },
+                    body: {
+                        "article": {
+                            "title": "Update! - Cypress articles from cypress code",
+                            "description": "Update! - This is regarding Cypress",
+                            "body": "Update! - Cypress is a test automation tool",
+                            "tagList": [
+                                "cypress",
+                                "test"
+                            ]
+                        }
                     }
                 }).then(response => {
                     expect(response.status).to.equal(200);
                     expect(response.body.article.title).to.equal("Update! - Cypress articles from cypress code");
                     expect(response.body.article.description).to.equal("Update! - This is regarding Cypress");
                     expect(response.body.article.body).to.equal("Update! - Cypress is a test automation tool");
+
+                    //=============DELETE=================
+                    cy.request({
+                        method: "DELETE",
+                        url: "http://localhost:3000/api/articles/" + slug,
+                        headers: {
+                            "Authorization": "Token " + token
+                        },
+
+                    }).then(response => {
+                        expect(response.status).to.equal(204);
+                        //Sending another GET request to make sure the deleted record is fully gone
+                        cy.request({
+                            method: "GET",
+                            url: "http://localhost:3000/api/articles/" + slug
+                        }).then(response => {
+                            expect(response.status).to.equal(404); //first check the status
+                        });
+                    });
+
                 });
             });
         });
