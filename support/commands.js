@@ -15,3 +15,8 @@ Cypress.Commands.add("loginToApplication", (email, password) => {
 
     });
 });
+/**
+ * Later you can call this command by name and passing the email and password. 
+ * Ex:
+ * cy.loginToApplication("user@email.com", "pas123");
+ */
